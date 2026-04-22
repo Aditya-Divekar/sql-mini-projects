@@ -1,0 +1,225 @@
+CREATE DATABASE SONGS ;
+USE  SONGS ;
+CREATE TABLE PLAYLIST (
+    SongID INT PRIMARY KEY,
+    SongName VARCHAR(50),
+    Artist VARCHAR(50),
+    Album VARCHAR(50),
+    Genre VARCHAR(50),
+    Duration TIME 
+);
+
+
+INSERT INTO Playlist (SongID, SongName, Artist, Album, Genre, Duration) VALUES
+(1, 'Shape of You', 'Ed Sheeran', 'Divide', 'Pop', '00:03:53'),
+(2, 'Blinding Lights', 'The Weeknd', 'After Hours', 'Synth-pop', '00:03:20'),
+(3, 'Believer', 'Imagine Dragons', 'Evolve', 'Rock', '00:03:24'),
+(4, 'Tum Hi Ho', 'Arijit Singh', 'Aashiqui 2', 'Bollywood', '00:04:22'),
+(5, 'Kesariya', 'Arijit Singh', 'Brahmastra', 'Bollywood', '00:04:28'),
+(6, 'Levitating', 'Dua Lipa', 'Future Nostalgia', 'Pop', '00:03:23'),
+(7, 'Senorita', 'Shawn Mendes', 'Shawn Mendes', 'Pop', '00:03:11'),
+(8, 'Faded', 'Alan Walker', 'Different World', 'EDM', '00:03:32'),
+(9, 'Perfect', 'Ed Sheeran', 'Divide', 'Pop', '00:04:23'),
+(10, 'Despacito', 'Luis Fonsi', 'Vida', 'Reggaeton', '00:03:47'),
+(11, 'Counting Stars', 'OneRepublic', 'Native', 'Pop Rock', '00:04:17'),
+(12, 'Apna Bana Le', 'Arijit Singh', 'Bhediya', 'Bollywood', '00:04:21'),
+(13, 'Dance Monkey', 'Tones and I', 'The Kids Are Coming', 'Pop', '00:03:29'),
+(14, 'Rockstar', 'Post Malone', 'Beerbongs & Bentleys', 'Hip-Hop', '00:03:38'),
+(15, 'Stay', 'Justin Bieber', 'Justice', 'Pop', '00:02:21'),
+(16, 'Let Me Love You', 'DJ Snake', 'Encore', 'EDM', '00:03:25'),
+(17, 'Cheap Thrills', 'Sia', 'This Is Acting', 'Pop', '00:03:31'),
+(18, 'Channa Mereya', 'Arijit Singh', 'Ae Dil Hai Mushkil', 'Bollywood', '00:04:49'),
+(19, 'Thunder', 'Imagine Dragons', 'Evolve', 'Rock', '00:03:07'),
+(20, 'Sunflower', 'Post Malone', 'Spider-Verse OST', 'Hip-Hop', '00:02:38');
+
+SELECT * FROM PLAYLIST ;
+
+
+
+ -- 1. RETRIVE ALL SONGS WHERE JENERE IS POP
+ 
+ SELECT SONGNAME FROM PLAYLIST
+ WHERE GENRE = 'POP' ;
+ 
+ 
+ 
+ -- 2. FIND SONGS BY ARIJIT SONG IN BOLLYWOOD GENERE
+ 
+ SELECT SONGNAME 
+ FROM PLAYLIST
+ WHERE 
+	ARTIST = 'ARIJIT SINGH' AND 
+	GENRE = "BOLLYWOOD" ;
+ 
+ 
+ 
+ -- 3. GET SONGS TAHT ARE EITHER ROCK OR EDM
+ 
+ SELECT SONGNAME 
+ FROM PLAYLIST
+ WHERE GENRE IN ('ROCK','EDM');
+ 
+ 
+ 
+ -- 4. DISPALY ALL SONGS SORTED BY SONG NAME ASC
+ 
+ SELECT * FROM PLAYLIST 
+ ORDER BY SONGNAME ASC;
+ 
+ 
+ 
+ -- 5. SHOW SONGS SORTED BY DURATION(LONGEST FIRST)
+ 
+ SELECT SONGNAME FROM PLAYLIST
+ ORDER BY DURATION DESC;
+ 
+ 
+ 
+ -- 6. COUNT HOW MANY SONGS IN EACH GENERE
+ 
+ SELECT GENRE , COUNT(SONGNAME) AS SONG1
+ FROM PLAYLIST
+ GROUP BY GENRE;
+ 
+ 
+ 
+ -- 7. SHOW GENERES HAVING MORE THAN 2 SONGS
+ 
+ SELECT GENRE, COUNT(SONGNAME) AS SONG2 
+ FROM PLAYLIST
+ GROUP BY GENRE
+ HAVING SONG2 >2;
+  
+  
+ 
+ -- 8. DISPLAY TOP 5 SONGS
+ 
+ SELECT * FROM PLAYLIST
+ LIMIT 5;
+ 
+ 
+ 
+ -- 9. SKIP FIRST 5 SONGS AND SHOW NEXT FIVE SONGS
+ 
+ SELECT * FROM PLAYLIST
+ LIMIT 5  OFFSET 5;
+ 
+ 
+ 
+ -- 10. FIND SONGS WHOSE NAME START WITH "C"
+ 
+ SELECT SONGNAME FROM PLAYLIST
+ WHERE SONGNAME LIKE 'C%';
+ 
+ 
+ -- 11. FIND ARTIST WISE TOTAL SONG SORTED BY HIGHEST COUNT
+ 
+ SELECT COUNT(SONGNAME) AS SONG3 ,ARTIST
+ FROM PLAYLIST
+ GROUP BY ARTIST
+ ORDER BY SONG3 DESC;
+ 
+ 
+ 
+		-- AGGREGATE FUNCTION -- 
+        
+        
+ -- 12. FIND TOTAL NO. OF SONGS IN PLAYLIST
+ 
+ SELECT COUNT(*) FROM PLAYLIST ;
+ 
+ 
+ -- 13. FIND COUNT NO OF SONGS FOR EACH ARTIST
+ 
+ SELECT ARTIST,COUNT(*) AS 'TOT_SONG'
+ FROM PLAYLIST
+ GROUP BY ARTIST
+ ORDER BY  TOT_SONG DESC;
+ 
+ 
+ -- 14. FIND SHORTEST SONG IN PLAYLIST
+ 
+ -- WITHOUT AGGREGATE --
+ SELECT * FROM PLAYLIST
+ ORDER BY DURATION ASC
+ LIMIT 1;
+ 
+ SELECT MIN(DURATION) AS 'SHORTEST_SONG'
+ FROM PLAYLIST;
+ 
+ 
+ -- FOR MAX --
+  SELECT MAX(DURATION) AS 'SHORTEST_SONG'
+ FROM PLAYLIST;
+ 
+ 
+ -- 15. FIND AVG DURATION OF SONG IN PLAYLIST
+ 
+ SELECT AVG(DURATION)
+ FROM PLAYLIST;
+ 
+ 
+  -- 16. FIND TOTAL DURATION OF  ALL SONG IN PLAYLIST
+  
+  SELECT SUM(DURATION) AS 'TOT_DURATION'
+  FROM PLAYLIST ;
+  
+  
+  -- SUB QUERY --
+  
+  
+/* SUB QUERY IS QUERY WRITTEN IN ANOTHER QUERY 
+	SYNTAX :
+
+			SELECT column_name
+			FROM table_name
+			WHERE column_name OPERATOR (
+				SELECT column_name FROM table_name
+			);
+            
+	TYPES OF SUBQUERY :
+		1. SINGLE ROW SUBQUERY
+        2.MULTI ROW SUBQUERY
+        3.CORELATED SUBQUERY
+*/
+
+
+-- Q.1 FIND LONGEST SONG FROM PLAYLIST TABLE
+
+SELECT MAX(DURATION) FROM PLAYLIST ;
+
+
+SELECT *
+FROM PLAYLIST 
+WHERE DURATION = (SELECT MAX(DURATION) FROM PLAYLIST); 
+
+
+-- Q.2 FIND SONGS LONGER THAN AVG DURATION
+
+SELECT * FROM PLAYLIST
+WHERE DURATION > (SELECT AVG(DURATION) FROM PLAYLIST);
+
+
+-- Q.2 FIND SONGS BY ARTIST WHO SINGS BOLLYWOOD SONGS
+
+SELECT ARTIST,SONGNAME,GENRE 
+FROM PLAYLIST
+WHERE GENRE = "BOLLYWOOD";
+  
+  -- WITH SUBQUERY -- 
+SELECT * 
+FROM PLAYLIST
+WHERE ARTIST IN
+	(SELECT ARTIST 
+     FROM PLAYLIST 
+	 WHERE GENRE = 'BOLLYWOOD');
+     
+     
+-- Q.3 FIND SONGS FROM SAME ALBUM AS SHAPE OF YOU
+
+SELECT *
+FROM PLAYLIST 
+WHERE ALBUM IN 
+	(SELECT ALBUM 
+	FROM PLAYLIST 
+    WHERE SONGNAME = 'SHAPE OF YOU');
